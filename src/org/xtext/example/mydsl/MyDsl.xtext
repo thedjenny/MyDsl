@@ -1,0 +1,57 @@
+grammar org.xtext.example.mydsl.MyDsl with org.eclipse.xtext.common.Terminals
+
+generate myDsl "http://www.xtext.org/example/mydsl/MyDsl"
+
+ExportModel:
+	'<?xml version = "1.0" encoding = "UTF-16"?>'
+	export = NetlistType;
+	
+NetlistType:
+	('<netlist xmlns="urn:netlist-schema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:netlist-schema ValidationRules.xsd" >
+	<!--Famic Technologies Inc.-->
+	<!--Automation Studio-->
+	<!--Export-->')?
+	'<documents>'
+	'<document Name=' docname=STRING(' DiagramType='doctype=STRING)?'>'
+	layer+= Layer*
+	'</document>'
+	'</documents>'
+	nodes = Nodes
+	'</netlist>'
+		;
+Layer:
+	'<layer Name=' coucheName=STRING (' Visible="true" Simulated="true" Locked="false"')?'>'
+	 components += Component*
+    '</layer>'
+;
+Component : 
+	'<component ComponentID='compoId = STRING' IDA='compoIda = STRING' IDF='compoIdf = STRING' IDT='compoIdt = STRING'>' 
+	vars +=Variable*
+'</component>'
+;
+
+Variable:
+	'<variable_type Name='varName=STRING'>'
+	tags += Tag*
+	'</variable_type>'
+;
+Tag:
+	'<t'tagNum=INT' Name='tagName=STRING'>'(var= ID | STRING | INT)?'</t'tagNum=INT'>'
+;
+Nodes:
+	'<nodes>'
+	nodes+= Node*
+	'</nodes>'
+;
+Node:
+	'<node Name='nodeName=STRING' Technology="Bloc">'
+	 	links += Link*
+	 '</node>'
+;
+Link:
+	'<link CompID='CompID=STRING' PortID='portID=STRING' PortName='portName=STRING' PortDirection='portName2=STRING baliseFermante = Balise
+	;
+Balise:
+	'/>'
+;
+	
