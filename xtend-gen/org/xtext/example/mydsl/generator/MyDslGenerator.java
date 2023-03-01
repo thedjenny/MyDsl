@@ -72,7 +72,7 @@ public class MyDslGenerator extends AbstractGenerator {
     boolean _greaterThan = (_size > 0);
     if (_greaterThan) {
       final HashSet<Bloc> visited = new HashSet<Bloc>();
-      final Stack<Bloc> stack = new Stack<Bloc>();
+      Stack<Bloc> stack = new Stack<Bloc>();
       for (final Bloc compo_1 : this.components) {
         boolean _contains_1 = visited.contains(compo_1);
         boolean _not = (!_contains_1);
@@ -81,19 +81,17 @@ public class MyDslGenerator extends AbstractGenerator {
         }
       }
       this.setBlocType(stack);
+      this.setVoisinType(stack);
       InputOutput.<String>println("********* MY STACK ***********");
       for (final Bloc element : stack) {
-        {
-          InputOutput.<String>print((element.idCompo + " : "));
-          for (final Voisin vos : element.voisins) {
-            InputOutput.<String>print((((vos.idCompo + "_") + vos.type) + " | "));
-          }
-          InputOutput.println();
-          InputOutput.<String>println((((element.idCompo + " est un\" ") + element.blocType) + " \" "));
-        }
+        InputOutput.<String>println((((element.idCompo + " est un\" ") + element.blocType) + " \" "));
       }
+      InputOutput.<String>println("******************************");
+      fsa.deleteFile("code.txt");
       fsa.generateFile("code.txt", this.generator.ArduinoCodeGen(stack));
       this.generator.ArduinoCodeClear();
+      stack.clear();
+      this.components.clear();
     }
   }
 
@@ -144,6 +142,19 @@ public class MyDslGenerator extends AbstractGenerator {
         }
         in = false;
         out = false;
+      }
+    }
+  }
+
+  public void setVoisinType(final Stack<Bloc> stack) {
+    for (final Bloc bloc : stack) {
+      for (final Voisin voisin : bloc.voisins) {
+        for (final Bloc tempBloc : stack) {
+          boolean _equals = Objects.equal(tempBloc.idCompo, voisin.idCompo);
+          if (_equals) {
+            voisin.blocType = tempBloc.blocType;
+          }
+        }
       }
     }
   }

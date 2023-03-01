@@ -24,7 +24,8 @@ StringBuffer loopCode = new StringBuffer();
 	 Bloc b;
 	 Voisin v;
 	ArduinoCodeGenerator generator = new ArduinoCodeGenerator();	
-	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {	
+	
+override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {	
 		
 		for (c : resource.allContents.filter(Component).toList) {
 			b = new Bloc()
@@ -50,7 +51,7 @@ StringBuffer loopCode = new StringBuffer();
 		
 		if (components.size > 0) {
 			val visited = new HashSet<Bloc>()
-			val stack = new Stack<Bloc>()
+			var stack = new Stack<Bloc>()
 			
 			for (compo : components) {
 				if (!visited.contains(compo)) {
@@ -58,19 +59,17 @@ StringBuffer loopCode = new StringBuffer();
 				}
 			}
 			setBlocType(stack)
-			
+			setVoisinType(stack)
 			println("********* MY STACK ***********")
 			for (element : stack) {
-				print(element.idCompo + " : ")
-			for (vos : element.voisins) {
-				print(vos.idCompo + "_" + vos.type + " | ");
-			}
-			println()
 			println(element.idCompo + " est un\" " + element.blocType + " \" " )
 			}
-			 
+			println("******************************")
+			fsa.deleteFile("code.txt") 
 		    fsa.generateFile("code.txt",generator.ArduinoCodeGen(stack)) 	
 			generator.ArduinoCodeClear()
+			stack.clear
+			components.clear
 		}
 		
 	}
@@ -114,11 +113,19 @@ StringBuffer loopCode = new StringBuffer();
 		in = false;
 		out = false;
 		}
-	
 		
 	}
 
-	
+def setVoisinType(Stack<Bloc> stack){
+	for (bloc : stack) {
+		for (voisin : bloc.voisins) {
+			for (tempBloc : stack) {
+				if(tempBloc.idCompo==voisin.idCompo)
+					voisin.blocType=tempBloc.blocType
+			}
+		}
+	}
+}
 
 	
 }
