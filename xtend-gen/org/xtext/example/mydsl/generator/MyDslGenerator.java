@@ -88,7 +88,7 @@ public class MyDslGenerator extends AbstractGenerator {
       }
       InputOutput.<String>println("******************************");
       fsa.deleteFile("code.txt");
-      fsa.generateFile("code.txt", this.generator.ArduinoCodeGen(stack));
+      fsa.generateFile("code.ino", this.generator.ArduinoCodeGen(stack));
       this.generator.ArduinoCodeClear();
       stack.clear();
       this.components.clear();

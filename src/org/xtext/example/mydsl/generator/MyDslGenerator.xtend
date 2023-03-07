@@ -66,7 +66,8 @@ override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorCo
 			}
 			println("******************************")
 			fsa.deleteFile("code.txt") 
-		    fsa.generateFile("code.txt",generator.ArduinoCodeGen(stack)) 	
+		
+		    fsa.generateFile("code.ino",generator.ArduinoCodeGen(stack)) 	
 			generator.ArduinoCodeClear()
 			stack.clear
 			components.clear
@@ -89,7 +90,6 @@ override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorCo
 		
 		stack.push(current)
 	}
-	
 	
 	def void setBlocType(Stack<Bloc> stack){
 		var in = false;
@@ -116,7 +116,7 @@ override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorCo
 		
 	}
 
-def setVoisinType(Stack<Bloc> stack){
+	def setVoisinType(Stack<Bloc> stack){
 	for (bloc : stack) {
 		for (voisin : bloc.voisins) {
 			for (tempBloc : stack) {
